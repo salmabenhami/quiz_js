@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Quiz</title>
+          <link rel="stylesheet" href="bootstrap-5.2.2-dist/css/bootstrap.min.css">
+          <script src="bootstrap-5.2.2-dist/js/bootstrap.min.js"></script>
+          <script src="bootstrap-5.2.2-dist/js/bootstrap.bundle.min.js"></script>
+          <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+          <style>
+                    body{
+                              color: white;
+                    }
+                    #section1, #scoreSection{
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                        height: 400px;
+                        margin:100px;
+                        background-color: transparent;
+                        color: white;
+                        border-radius: 50px;
+                        box-shadow: 4px 4px 4px 4px black;
+                        background-image: url(InShot_20240409_014152682.jpg);
+                    }
+                    a{
+                        text-decoration: none;
+                        background-color: black;
+                        border-radius: 4px;
+                        border: solid wheat 2px;
+                        padding: 5px;
+                    }
+                    #art1 h1,h2{
+                        font-weight: bolder;
+                    }
+                    body{
+                        background-image: url(67c7b6abd04012aeb8891ded3c660885.jpg);
+                    }
+                    input[type="text"] {
+                        background-color: transparent;
+                        border: 1px solid white;
+                        color: white;
+                        padding: 10px;
+                    }
+                    #art1 , #art2{
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        
+                    }
+                    #quiz{
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                              height: 450px;
+                              margin:100px;
+                              background-color: transparent;
+                              color: white;
+                              border-radius: 50px;
+                              box-shadow: 4px 4px 4px 4px black;
+                              background-image: url(InShot_20240409_014152682.jpg);
+                              padding-top: 5px;
+          
+                    }
+          
+                   h4 {
+                    margin-top: 100px;
+                    }
+          
+                    #answers {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    color: white;
+                    text-align: center;
+                    margin-top: 20px; 
+                    }
+          
+          
+                    .timer-bar {
+                        width: 50%;
+                        height: 10px;
+                        background-color: #ddd;
+                        margin-top: 20px;
+                        border-radius: 5px;
+                        overflow: hidden;
+                    }
+                    .timer-fill {
+                        width: 100%;
+                        height: 10px;
+                        background-color: rgb(107, 83, 192);
+                        animation: timer-animation 75s linear forwards;
+                    }
+            
+                    @keyframes timer-animation {
+                        0% {
+                            width: 100%;
+                        }
+            
+                        100% {
+                            width: 0%;
+                        }
+                    }
+                    #timerAudi{
+                              position: absolute;
+                              left: -9999px;
+                              top: -9999px;
+                    }
+                    .btn-answer{
+                              width: 40%;
+                              margin: 5px;
+          
+                    }
+                    #scoreSection {
+                        position: relative;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    #score_s {
+                        position: absolute;
+                        left: -100%;
+                        margin-top:150px ;
+                        margin-left: 450px;
+                        animation: slideFromLeft 1s ease forwards;
+                    }
+
+                    @keyframes slideFromLeft {
+                        from {
+                            left: -100%;
+                        }
+                        to {
+                            left: 0;
+                        }
+                    }
+                    .score-text{
+                        font-size: 24px;
+                    }
+
+          </style>
+</head>
+
+<body>
+          <main>
+                    <section id="section1">
+                        <article id="art1">
+                            <h1>Welcome</h1>
+                            <hr width="20%">
+                            <p>Préparez-vous à tester vos connaissances et à découvrir <br>les aspects essentiels du langage HTML fondamental pour la création de sites web. <br> Que le quiz commence !</p>
+                            <a href="https://developer.mozilla.org/fr/docs/Web/HTML" class="btn btn-danger mt-4" target="_blank">Learn more</a>
+                        </article>
+                        <article id="art2">
+                            <h2>Start your quiz!</h2>
+                            <div class="form-group">
+                                <label for="nom" class="col-form-label">Nom</label>
+                                <input type="text" id="nom" name="nom" class="form-control rounded-pill" placeholder="Saisir votre nom" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prenom" class="col-form-label">Prénom</label>
+                                <input type="text" id="prenom" name="prenom" class="form-control rounded-pill" placeholder="Saisir votre prénom" required>
+                            </div>
+                            <button class="btn btn-danger mt-4" onclick="start()">Start</button>
+                        </article>
+                    </section>
+                    <section id="quiz" style="display: none;">
+                          <h4 id="question" style="margin-left: 150px;"></h4>
+                          <hr width="50%" align="center" style="margin-left: 200px;">
+                          <div id="answers">
+                          </div>
+                          <div class="timer-fill timer-bar" id="timerBar"></div>
+                
+                      </section>
+                          <audio id="timerAudio" >
+                                    <source src="clock-ticking-60-second-countdown-118231.mp3">
+                          </audio>
+                          <section id="scoreSection" style="display: none;">
+                            <div id="score_s">
+                            </div>
+                        </section>
+                          
+                
+          </main>
+          <script>
+                    var questions = [
+                    {
+                        question: "Parmi les groupes suivants, lequel s’occupe principalement du développement et de la mise à jour des spécifications HTML ?",
+                        answers: [
+                                { text: "Microsoft", correct: false },
+                                { text: "Mozilla", correct: false },
+                                { text: "W3C", correct: true },
+                        ]
+                    },
+                    {
+                        question: "La balise responsable des liens est : ",
+                        answers:[
+                                { text: "a", correct: true },
+                                { text: "b", correct: false },
+                                { text: "u", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Lorsque vous utilisez l'élément a, vous devez obligatoirement préciser...",
+                        answers: [
+                            { text: "Un attribut target", correct: false },
+                            { text: "Un attribut href", correct: true },
+                            { text: "Deux attributs href et target", correct: false }
+                        ]
+                    },
+                    {
+                        question:"HTML est un language de balisage",
+                        answers: [
+                                { text: "Vrai", correct: true },
+                                { text: "Faux", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Laquelle de ces syntaxes est correcte pour écrire un commentaire en HTML ?",
+                        answers: [
+                            { text: "<!--Commentaire-->", correct: true },
+                            { text: "<--Commentaire-->", correct: false },
+                            { text: "<!--Commentaire--!>", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Pour indiquer qu'un contenu est très important, on utilise l'élément...",
+                        answers: [
+                            { text: "Strong", correct: false },
+                            { text: "Em", correct: false },
+                            { text: "Mark", correct: true }
+                        ]
+                    },
+                    {
+                        question: "Quels éléments sont nécessaires pour créer une liste non-ordonnée ?",
+                        answers: [
+                            { text: "ul et li", correct: true },
+                            { text: "ol et li", correct: false },
+                            { text: "ul et ol", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Laquelle de ces syntaxes est correcte ?",
+                        answers: [
+                            { text: '<img>src="mon-image.jpg" alt="Une image"</img>', correct: false },
+                            { text: '<img src="mon-image.jpg" alt="Une image">', correct: true },
+                            { text: '<img href="mon-image.jpg" alt="Une image">', correct: false }
+                        ]
+                    },
+                    {
+                        question: "A quoi sert l'attribut alt de l'élément img ?",
+                        answers: [
+                            { text: "A donner une description de l'image si celle-ci ne peut pas s'afficher", correct: true },
+                            { text: "A donner un lien alternatif vers l'image si le premier est cassé", correct: false },
+                            { text: "A afficher une deuxième image si la première ne peut pas s'afficher", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Pourquoi doit-on toujours essayer d'avoir un code HTML valide ?",
+                        answers: [
+                            { text: "Pour minimiser le nombre de bugs potentiels", correct: false },
+                            { text: "Pour optimiser son référencement", correct: false },
+                            { text: "Pour éviter des problèmes d'affichage futurs", correct: true }
+                        ]
+                    }
+
+                    ]
+                    
+                    var indice = 0
+
+                    function start() {
+                            var nom = document.getElementById('nom').value
+                            var prenom = document.getElementById('prenom').value
+                            if(nom=="" && prenom==""){
+                                alert('veuillez saisir votre nom et prenom')
+                                return
+                            }
+                            document.getElementById('section1').style.display = "none"
+                            document.getElementById('quiz').style.display = "block"
+                            quiz()
+                    }
+
+                    var score = 0
+                    function quiz() {
+                    var question = questions[indice]
+                    var repv = ''
+                    document.getElementById('timerAudio').play()
+                    for (var i = 0; i < question.answers.length; i++) {
+                              if (question.answers[i].correct) {
+                                        repv = question.answers[i].text
+                                        break
+                              }
+                    }
+                    document.getElementById('question').innerText = question.question
+                    var rep = document.getElementById('answers')
+                    rep.innerHTML = ''
+                    question.answers.forEach(function(answer) {
+                              var button = document.createElement('button')
+                              button.innerText = answer.text
+                              button.classList.add('btn', 'btn-answer', 'border', 'border-light', 'text-white')
+                              button.onclick = function() {
+                                        var repsel = this.innerText
+                                        var buttons = rep.querySelectorAll('.btn-answer')
+                                        buttons.forEach(function(btn) {
+                                        btn.disabled = true
+
+                              if (btn.innerText === repv) {
+                                        btn.classList.add("btn-success")
+                                        
+                              } 
+                              else {
+                                        btn.classList.add("btn-danger")
+                              }
+                              })
+
+                              if (repsel === repv) {
+                              score++
+                              }
+                              document.getElementById('timerBar').classList.remove('active')
+                              setTimeout(nextQuestion, 500)
+                    }
+                                rep.appendChild(button)
+                    })
+                    document.getElementById('timerBar').classList.add('active')
+                    }
+                    function nextQuestion() {
+    indice++;
+    if (indice < questions.length) {
+        quiz();
+    } else {
+        var nom = document.getElementById('nom').value;
+        var prenom = document.getElementById('prenom').value;
+        var score_s= document.getElementById('score_s');
+        var scoreSection = document.getElementById('scoreSection');
+        var quizSection = document.getElementById('quiz');
+
+        if (score >= 5) {
+            score_s.innerText = 'Félicitations ' + nom + ' ' + prenom+'!' +'\n'+' Votre score est :' + score;
+        } else {
+            score_s.innerText = 'À la prochaine ' + nom +' '+prenom+'!'+ '\n'+'Votre score est : ' + score;
+        }
+        score_s.classList.add('score-text');
+        scoreSection.style.display = "block"; 
+        quizSection.style.display = "none"; 
+        document.getElementById('timerAudio').pause();
+        document.getElementById('timerBar').style.display = "none";
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </script>
+</body>
+</html>
